@@ -1,25 +1,25 @@
-# Java class files
+# Java build files
 *.class
 
-# VS Code or IntelliJ metadata
+# IDE-specific files
 .vscode/
 .idea/
 *.iml
 
-# OS-specific files
+# OS junk
 .DS_Store
 Thumbs.db
 
-# Project build/output directories (if any in future)
-bin/
+# Build output (if any)
 out/
+bin/
 
-# Log files
+# Ignore all files in data/configs except .keep
+data/configs/*
+!data/configs/.keep
+
+# Ignore devices.csv by default, but allow it now
+!data/devices.csv
+
+# Log files (if added later)
 *.log
-
-# Data directory (optional: remove if you want to commit example CSV/configs)
-data/devices.csv
-data/configs/
-
-# Avoid uploading compiled files or test exports
-src/**/*.class
