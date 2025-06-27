@@ -1,0 +1,25 @@
+# Java class files
+*.class
+
+# VS Code or IntelliJ metadata
+.vscode/
+.idea/
+*.iml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Project build/output directories (if any in future)
+bin/
+out/
+
+# Log files
+*.log
+
+# Data directory (optional: remove if you want to commit example CSV/configs)
+data/devices.csv
+data/configs/
+
+# Avoid uploading compiled files or test exports
+src/**/*.class
