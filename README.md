@@ -1,19 +1,21 @@
 # Network Device Inventory & Configuration Manager (Java CLI Project)
 
 A Java-based command-line tool that simulates an enterprise-level inventory and configuration management system for network devices.
-Ideal for demonstrating object-oriented design, file I/O, CLI interaction, and system-thinking.
+Ideal for demonstrating object-oriented design, audit logging, file I/O, CLI interaction, and system-thinking workflows often seen in SRE environments.
 
 ---
 
 ## ➽ Features
 
-* Add new network devices with metadata
-* View all registered devices
-* Deactivate or reactivate a device
-* Delete devices from inventory
-* Save device configuration snapshots to individual text files
-* View saved config files from the CLI
-* Export full inventory to CSV
+* Add new network devices with full metadata (ID, IP, Hostname, OS, etc.)
+* Automatic timestamping (`createdAt`) and operator tracking (`addedBy`)
+* View all registered devices in detailed or summary view
+* Deactivate or reactivate any device from the CLI
+* Delete devices from inventory with logs
+* Save per-device configuration snapshots (`.conf` format)
+* Export full inventory to CSV (with audit fields)
+* Auto-create folders for configs and logs if not present
+* Maintain a running log of all actions performed (`logs/actions.log`)
 
 ---
 
@@ -24,6 +26,8 @@ NetworkDeviceInventoryManager/
 ├── data/
 │   ├── devices.csv          # Inventory exports
 │   └── configs/             # Per-device config files
+├── logs/
+│   └── actions.log          # CLI command logs
 ├── src/
 │   ├── Main.java            # CLI entry point
 │   ├── models/
@@ -76,25 +80,21 @@ You'll see a menu like:
 3. Delete Device
 4. Deactivate Device
 5. Activate Device
-6. Export to CSV
-7. Save Config File
-8. View Config File
-9. Exit
+6. Save Config File
+7. Exit
 ```
 
 Just enter the number for the action you want.
 
 ---
 
-## ➽ Export & Config Details
+## ➽ Export, Config & Logs
 
-* All exported inventory is saved to:
-  `data/devices.csv`
+* Inventory CSV: `data/devices.csv`
+* Config files: `data/configs/{DEVICE_ID}_config.conf`
+* Logs (all activity): `logs/actions.log`
 
-* Config files are saved in:
-  `data/configs/{DEVICE_ID}_config.txt`
-
-> You don’t need to create these folders manually — the program will handle it automatically.
+> These folders will be created automatically by the tool if they don’t already exist.
 
 ---
 

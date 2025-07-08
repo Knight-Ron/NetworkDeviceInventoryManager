@@ -1,6 +1,7 @@
 import services.InventoryManager;
 import models.NetworkDevice;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -15,13 +16,10 @@ public class Main {
             System.out.println("3. Delete Device");
             System.out.println("4. Deactivate Device");
             System.out.println("5. Activate Device");
-            System.out.println("6. Export to CSV");
-            System.out.println("7. Save Config File");
-            System.out.println("8. View Config File");
-            System.out.println("9. Exit");
+            System.out.println("6. Save Config File");
+            System.out.println("7. Exit");
 
             System.out.print("Select an option: ");
-
             String choice = scanner.nextLine();
 
             switch (choice) {
@@ -38,46 +36,52 @@ public class Main {
                     String type = scanner.nextLine();
                     System.out.print("Enter Location: ");
                     String location = scanner.nextLine();
+                    System.out.print("Enter your name (added by): ");
+                    String addedBy = scanner.nextLine();
 
-                    NetworkDevice device = new NetworkDevice(id, hostname, ip, os, type, location);
-                    manager.addDevice(device);
+                    NetworkDevice device = new NetworkDevice(id, hostname, ip, os, type, location, addedBy);
+                    boolean added = manager.addDevice(device);
+                    if (added) {
+                        System.out.println("Device added successfully.");
+                    } else {
+                        System.out.println("Failed to add device. Duplicate ID or invalid IP.");
+                    }
                     break;
 
                 case "2":
-                    manager.viewDevices();
+                    List<String> summaries = manager.getDeviceSummaries();
+                    if (summaries.isEmpty()) {
+                        System.out.println("No devices found.");
+                    } else {
+                        for (String info : summaries) {
+                            System.out.println("----------------------------------------");
+                            System.out.println(info);
+                        }
+                    }
                     break;
 
-                    case "3":
-                        System.out.print("Enter Device ID to delete: ");
-                        String deleteId = scanner.nextLine().trim();
-                        boolean removed = manager.deleteDevice(deleteId);
-                        if (removed) {
-                            System.out.println("Device deleted.");
-                        } else {
-                            System.out.println("Device not found.");
-                        }
-                        break;
-
+                case "3":
+                    System.out.print("Enter Device ID to delete: ");
+                    String deleteId = scanner.nextLine().trim();
+                    boolean removed = manager.deleteDevice(deleteId);
+                    System.out.println(removed ? "Device deleted." : "Device not found.");
+                    break;
 
                 case "4":
                     System.out.print("Enter Device ID to deactivate: ");
                     String deviceId = scanner.nextLine();
-                    manager.deactivateDevice(deviceId);
+                    boolean deactivated = manager.deactivateDevice(deviceId);
+                    System.out.println(deactivated ? "Device deactivated." : "Device not found.");
                     break;
 
-                    case "5":
-                        System.out.print("Enter Device ID to activate: ");
-                        String activateId = scanner.nextLine();
-                        manager.activateDevice(activateId);
-                        break;
+                case "5":
+                    System.out.print("Enter Device ID to activate: ");
+                    String activateId = scanner.nextLine();
+                    boolean activated = manager.activateDevice(activateId);
+                    System.out.println(activated ? "Device activated." : "Device not found.");
+                    break;
 
                 case "6":
-                    System.out.println("Exporting to: ../data/devices.csv");
-                    String filePath = "../data/devices.csv";
-                    manager.exportToCSV(filePath);
-                    break;
-
-                case "7":
                     System.out.print("Enter Device ID to save config: ");
                     String targetId = scanner.nextLine();
                     NetworkDevice target = null;
@@ -88,22 +92,15 @@ public class Main {
                         }
                     }
                     if (target != null) {
-                        System.out.print("Enter config content (single-line): ");
-                        String config = scanner.nextLine();
-                        manager.writeConfigToFile(target, config, "../data/configs");
+                        manager.writeConfigToFile(target, "data/configs");
+                        System.out.println("Config snapshot saved.");
                     } else {
                         System.out.println("Device not found.");
                     }
                     break;
 
-                case "8":
-                    System.out.print("Enter Device ID to view config: ");
-                    String configId = scanner.nextLine().trim();
-                    manager.readConfigFile(configId, "../data/configs");
-                    break;
-
-                case "9":
-                    System.out.println("Exiting...");
+                case "7":
+                    System.out.println("Exiting... Goodbye.");
                     return;
 
                 default:
